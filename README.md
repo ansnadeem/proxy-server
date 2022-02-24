@@ -8,6 +8,6 @@ Java(TM) SE Runtime Environment (build 17.0.2+8-LTS-86)
 
 # Execution
 Use the command:-
-java -jar proxy.jar <port>
+java -jar proxy.jar %port%
 
-<port> - The local port number number the proxy will listen to
+%port% - The local port number number the proxy will listen to
