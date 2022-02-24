@@ -88,8 +88,8 @@ public class ProxyServer {
 		String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
 		try {
 			FileWriter fileWriter = new FileWriter("log.txt", true);
-		    BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-		    String logLine = String.format("%s: %s\n", timeStamp, info);
+		 	BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+		    	String logLine = String.format("%s: %s\n", timeStamp, info);
 			bufferedWriter.write(logLine);
 			System.out.print(logLine);
 			bufferedWriter.close();
