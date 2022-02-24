@@ -25,8 +25,8 @@ public class ProxyServer {
 	public static void main(String[] args) {
 		try
 		{
-			new ProxyServer().startServer(3543); //DEBUG ONLY
-			//new ProxyServer().startServer(Integer.parseInt(args[0]));
+			//new ProxyServer().startServer(3543); //DEBUG ONLY
+			new ProxyServer().startServer(Integer.parseInt(args[0]));
 		}
 		catch(Exception e)
 		{
