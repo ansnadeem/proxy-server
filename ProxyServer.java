@@ -1,4 +1,4 @@
-package Proxy;
+package proxy;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -6,9 +6,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -26,10 +23,20 @@ public class ProxyServer {
 	String logFileName = "log.txt";
 
 	public static void main(String[] args) {
-		new ProxyServer().startServer(Integer.parseInt(args[0]));
+		try
+		{
+			//new ProxyServer().startServer(3543); //DEBUG ONLY
+			new ProxyServer().startServer(Integer.parseInt(args[0]));
+		}
+		catch(Exception e)
+		{
+			System.out.print("Unable to run proxy, see stack trace below");
+			e.printStackTrace();
+			return;
+		}
 	}
 
-	void startServer(int proxyPort) {
+	void startServer(int proxyPort) throws IOException {
 
 		cache = new ConcurrentHashMap<>();
 
@@ -38,15 +45,32 @@ public class ProxyServer {
 		if (!cacheDir.exists() || (cacheDir.exists() && !cacheDir.isDirectory())) {
 			cacheDir.mkdirs();
 		}
-
-		/**
-			 * To do:
-			 * create a serverSocket to listen on the port (proxyPort)
-			 * Create a thread (RequestHandler) for each new client connection 
-			 * remember to catch Exceptions!
-			 *
-		*/
- 
+		
+		
+		// 1- Create the ServerSocket Object
+		ServerSocket server = null;
+		try {
+			server = new ServerSocket(proxyPort);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+		
+		// 2-Create a thread (RequestHandler) for each new client connection 
+		try {
+			while(true) {
+				Socket connectionSocket = server.accept();
+				RequestHandler task = new RequestHandler(connectionSocket, this);
+				Thread thread = new Thread(task) ;
+				thread.start();
+			}
+		} 
+		catch (IOException e) {
+			if (server!=null)
+			{
+				server.close();
+			}
+		}
 		
 	}
 
@@ -61,13 +85,17 @@ public class ProxyServer {
 	}
 
 	public synchronized void writeLog(String info) {
-		
-			/**
-			 * To do
-			 * write string (info) to the log file, and add the current time stamp 
-			 * e.g. String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
-			 *
-			*/
+		String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+		try {
+			FileWriter fileWriter = new FileWriter("log.txt", true);
+		    BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+		    String logLine = String.format("%s: %s\n", timeStamp, info);
+			bufferedWriter.write(logLine);
+			System.out.print(logLine);
+			bufferedWriter.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }
