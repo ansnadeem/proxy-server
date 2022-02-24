@@ -2,12 +2,12 @@
 A simple local proxy server which caches content locally and responds back to the user with server response.
 
 # Pre-requisites
-## Java Runtime Evironment
+### Java Runtime Evironment
 Tested on: 
 java 17.0.2 2022-01-18 LTS
 Java(TM) SE Runtime Environment (build 17.0.2+8-LTS-86)
 
-## A web browser
+### A web browser
 Mozilla is recommended for testing.
 
 # Execution
